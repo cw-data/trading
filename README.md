@@ -1,1 +1,1 @@
-# trading
+# A paper-trading interface
