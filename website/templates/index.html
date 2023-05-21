@@ -21,5 +21,12 @@
             <input type="radio" value="sell" name="side">Sell
             <input type="submit" value="Submit">
         </form>
+        <h2>Research</h2>
+        <div id='chart' class='chart'></div>
     </body>
+    <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+    <script type='text/javascript'>
+        var graphs = {{graphJSON | safe}};
+        Plotly.plot('chart',graphs,{});
+    </script>
 </html>
