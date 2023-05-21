@@ -53,16 +53,5 @@ def index():
     fig = go.Figure(data=candlestick_fig.data + sma_fig.data + upper_line_fig.data + lower_line_fig.data)
     fig.update_layout(xaxis_rangeslider_visible=False, template='plotly_dark')
     graphJSON = json.dumps(fig, cls=pu.PlotlyJSONEncoder)
-    # fig.show()
-    # df = pd.DataFrame(
-    #    {
-    #         'Fruit': ['Apples', 'Oranges', 'Bananas', 'Apples', 'Oranges', 'Bananas'],
-    #         'Amount': [4, 1, 2, 2, 4, 5],
-    #         'City': ['SF', 'SF', 'SF', 'Montreal', 'Montreal', 'Montreal']
-    #     }
-    # )
-    # fig = px.bar(df, x='Fruit', y='Amount', color='City', barmode='group')
-    # graphJSON = json.dumps(fig, cls=pu.PlotlyJSONEncoder)
-#    return render_template('notdash.html', graphJSON=graphJSON)
 
     return render_template('index.html', graphJSON=graphJSON)
