@@ -9,34 +9,11 @@ import plotly.utils as pu
 import json
 import pandas as pd
 
-
 pages = Blueprint('pages', __name__)
 rest_client = REST(config.ALPACA_KEY_ID, config.ALPACA_SECRET_KEY)
 
 @ pages.route('/', methods=['GET', 'POST'])
 def index():
-
-    if request.method == 'POST':
-        
-        ticker = request.form.get('ticker')
-        qty = request.form.get('qty')
-        order_type = request.form.get('order_type')
-        order_side = request.form.get('side')
-        # print(ticker)
-        # print(qty)
-        # print(order_type)
-
-        # if order_type == 'Market':
-        #     order = MarketOrder()
-        if order_type == 'market':
-            order = MarketOrder(ticker, qty, order_side, order_type)
-            print(order.data)
-            order.place_order()
-            return render_template('index.html')
-        elif order_type == 'limit':
-            return render_template('index.html')
-        else:
-            print("error: didn't match an order_type")
 
     rest_client = REST(config.ALPACA_KEY_ID, config.ALPACA_SECRET_KEY)
     bars = rest_client.get_bars("SPY", TimeFrame.Day, "2021-06-01", "2021-10-01").df
@@ -51,7 +28,23 @@ def index():
     upper_line_fig = px.line(x=bars.index, y=bars['upper_band'])
     lower_line_fig = px.line(x=bars.index, y=bars['lower_band'])
     fig = go.Figure(data=candlestick_fig.data + sma_fig.data + upper_line_fig.data + lower_line_fig.data)
-    fig.update_layout(xaxis_rangeslider_visible=False, template='plotly_dark')
+    fig.update_layout(xaxis_rangeslider_visible=False, template='plotly_dark', showlegend=False)
     graphJSON = json.dumps(fig, cls=pu.PlotlyJSONEncoder)
+
+    if request.method == 'POST':
+        ticker = request.form.get('ticker')
+        qty = request.form.get('qty')
+        order_type = request.form.get('order_type')
+        order_side = request.form.get('side')
+        
+        if order_type == 'market':
+            order = MarketOrder(ticker, qty, order_side, order_type)
+            print(order.data)
+            order.place_order()
+            return render_template('index.html', graphJSON=graphJSON)
+        elif order_type == 'limit':
+            return render_template('index.html', graphJSON=graphJSON)
+        else:
+            print("error: didn't match an order_type")
 
     return render_template('index.html', graphJSON=graphJSON)
