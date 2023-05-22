@@ -23,10 +23,18 @@
         </form>
         <h2>Research</h2>
         <div id='chart' class='chart'></div>
+        <h2>Positions</h2>
+        <!-- https://plotly.com/python/v3/html-reports/ -->
+        <div id='main_table' class="table table-striped"></div>
     </body>
     <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
     <script type='text/javascript'>
         var graphs = {{graphJSON | safe}};
         Plotly.plot('chart',graphs,{});
+    </script>
+    <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+    <script type='text/javascript'>
+        var mytable = {{main_table | safe}};
+        Plotly.plot('main_table',mytable,{});
     </script>
 </html>
