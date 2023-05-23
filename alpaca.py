@@ -89,3 +89,46 @@ def pos_table() -> str:
     ])
     graphJSON = json.dumps(fig, cls=pu.PlotlyJSONEncoder)
     return graphJSON
+
+def find_positions() -> dict:
+    # Identify positions
+    # find points where the close was above the upper band
+    sells = {
+        'pos_type': [],
+        'timestamp': [],
+        'close': [],
+        'upper': []
+    }
+    for i in range(len(bars['open'])):
+        if bars['close'][i] > bars['upper_band'][i]:
+            myclose = bars['close'][i]
+            myband = bars['upper_band'][i]
+            mytimestamp = bars['timestamp'][i]
+            # print('got here')
+            sells['pos_type'].append('sell')
+            sells['timestamp'].append(mytimestamp)
+            sells['close'].append(myclose)
+            sells['upper'].append(myband)
+
+    # find points where the open was below the lower band
+    buys = {
+        'pos_type': [],
+        'timestamp': [],
+        'close': [],
+        'upper': []
+    }
+    for i in range(len(bars['open'])):
+        if bars['open'][i] < bars['lower_band'][i]:
+            myclose = bars['close'][i]
+            myband = bars['upper_band'][i]
+            mytimestamp = bars['timestamp'][i]
+            # print('got here')
+            buys['pos_type'].append('buy')
+            buys['timestamp'].append(mytimestamp)
+            buys['close'].append(myclose)
+            buys['upper'].append(myband)
+    positions = {
+        'buys': buys,
+        'sells': sells
+    }
+    return positions
