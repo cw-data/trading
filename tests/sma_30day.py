@@ -31,7 +31,7 @@ positions = pd.DataFrame
 # find points where the close was above the upper band
 closes = {
     'pos_type': [],
-    'timestamp': [],
+    'timestamp_in': [],
     'close': [],
     'upper': []
 }
@@ -39,28 +39,44 @@ for i in range(len(bars['open'])):
     if bars['close'][i] > bars['upper_band'][i]:
         myclose = bars['close'][i]
         myband = bars['upper_band'][i]
-        mytimestamp = bars['timestamp'][i]
+        mytimestamp = bars['timestamp_in'][i]
         # print('got here')
         closes['pos_type'].append('sell')
         closes['timestamp'].append(mytimestamp)
         closes['close'].append(myclose)
         closes['upper'].append(myband)
+        
 
-# find points where the open was below the lower band
-opens = {
+
+
+
+
+
+
+# find historical points where the open was below the lower band
+# these may be points at which you'd want to buy the stock
+buys = {
     'pos_type': [],
-    'timestamp': [],
+    'timestamp_in': [],
     'close': [],
-    'upper': []
+    'upper': [],
+    'timestamp_out': [],
+    'profit': []
 }
 for i in range(len(bars['open'])):
     if bars['open'][i] < bars['lower_band'][i]:
         myclose = bars['close'][i]
         myband = bars['upper_band'][i]
         mytimestamp = bars['timestamp'][i]
-        # print('got here')
-        opens['pos_type'].append('sell')
-        opens['timestamp'].append(mytimestamp)
-        opens['close'].append(myclose)
-        opens['upper'].append(myband)
+        
+        buys['pos_type'].append('buy')
+        buys['timestamp'].append(mytimestamp)
+        buys['close'].append(myclose)
+        buys['upper'].append(myband)
 
+        # hold until the price stops going up
+        # calculate slope between two points
+        # if the slope is positive, hold
+        # if the slope is 0 or negative , check the next candle
+        # if the slope to the next candle is also 0 or negative, sell
+        # on sell, capture out timestamp and calculate profit
