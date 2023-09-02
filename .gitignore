@@ -162,3 +162,5 @@ cython_debug/
 # Project files
 todo.txt
 config.py
+assets/inputs/trading.db
+db
