@@ -94,3 +94,4 @@ def insert_data(df:pd.DataFrame, db:str='assets/inputs/trading.db') -> None:
     con.close()
     print(f'{len(df)} rows successfully inserted into `tbl_prices`')
 
+# adding a comment for the merge test
